@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Football Teams</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #teams-list {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #teams-list li {
+            flex: 0 0 25%;
+            max-width: 25%;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        #team-players {
+            margin-top: 20px;
+        }
+
+        #players-list li {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+<h1>Liste des équipes</h1>
+<ul id="teams-list">
+    {% for team in teams %}
+    <li><button class="team-btn">{{ team.name }}</button></li>
+    {% endfor %}
+</ul>
+
+<div id="team-players" style="display: none;">
+    <h2 id="team-name"></h2>
+    <ul id="players-list">
+    </ul>
+</div>
+
+<script>
+    const teamButtons = document.querySelectorAll('.team-btn');
+    const teamNameEl = document.getElementById('team-name');
+    const playersListEl = document.getElementById('players-list');
+    const teamPlayersEl = document.getElementById('team-players');
+
+    teamButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const teamName = button.textContent;
+            fetch('/team', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({teamName: teamName})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    teamNameEl.textContent = teamName;
+                    playersListEl.innerHTML = '';
+                    data.forEach((player) => {
+                        const li = document.createElement('li');
+                        li.textContent = player;
+                        playersListEl.appendChild(li);
+                    });
+                    teamPlayersEl.style.display = 'block';
+                })
+                .catch(error => console.error(error));
+        });
+    });
+</script>
+
+</body>
+<footer>
+    <iframe src="/templates/copyrights.txt"></iframe>
+</footer>
+
+</html>

@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  web:
+    image: ligue1
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - my-network
+    volumes:
+      - type: bind
+        source: ./templates/copyrights.txt
+        target: /app/templates/copyrights.txt
+  db:
+    image: mongo
+    container_name: db
+    ports: 
+      - "27017:27017"
+    volumes:
+      - db:/data/db
+    networks:
+      - my-network
+volumes:
+  db:
+
+networks:
+  my-network:
+    driver: bridge
