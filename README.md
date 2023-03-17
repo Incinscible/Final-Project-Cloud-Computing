@@ -15,12 +15,15 @@ To run the application, follow these steps:
   1) Clone the repository:
 
     git clone https://github.com/<username>/<repository>.git cd <repository>
-  
-2) Start the Docker containers:
-    
-    docker-compose up
-    
-3) Access the application at http://localhost:5000 in a web browser.
+2) Build the image:
+```
+docker build -t ligue1 .
+```
+3) Start the Docker containers:
+  ```
+  docker-compose up
+  ```
+4) Access the application at http://localhost:5000 in a web browser.
 
 #### Usage
 
